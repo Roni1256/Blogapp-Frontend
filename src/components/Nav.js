@@ -1,46 +1,48 @@
 import React, { useState } from 'react'
-import { IoMenu } from "react-icons/io5";
-import samplepic from '../assets/pic.jpg'
+import { MdMenu } from 'react-icons/md'
+import { Link } from 'react-router-dom'
+import { Login } from './Login'
+import { Register } from './Register'
+import user from '../assets/dummy.jpg'
 
-
-
-const topLink='text-xl font-bold text-white/70 hover:text-white focus:text-white hidden md:block'
 export const Nav = () => {
+  const[showMenu,setMenu]=useState(false)
+  const[showLogin,setLogin]=useState(false)
+  const[showReg,setReg]=useState(false)
+  const [auth,setAuth]=useState(true)
 
-  const [reg,setReg]=useState(false)
-  const [show,setShow]=useState(false)
   return (
     <>
-        <div className="w-full md:w-3/4 lg:w-98 px-5 fixed   z-20 ">
-            <div className="w-full py-3  flex  bg-slate-900 text-white rounded-lg px-4 items-center shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] justify-between">
-                <h1 className='text-2xl font-bold tracking-wide  cursor-pointer' >Blogs</h1>
-                <input type="text" name="" id="" className='bg-white text-black md:w-64 w-1/2  rounded-lg py-2 px-4 focus:outline-none ' placeholder='Search'/>
-                <div className="px-5 flex gap-4 ">
-                  <button className={reg?topLink:'hidden'} >Login</button>
-                  <button className={reg?topLink:'hidden'} >Register</button>
-                  <div className={!reg?"flex gap-5":"hidden"}>
-                    
-                    <img src={samplepic} alt="" className='w-14 h-14 rounded-full cursor-pointer ring-2 ring-slate-200' />
-                  </div>
-                  
-                </div>
-                <button className='md:hidden ' onClick={()=>setShow(!show)}><IoMenu className='text-4xl '/></button>
-                <div className="absolute right-10 top-12">
-                  <PopNav show={show} auth={reg}/>
-                </div>
-            </div>
-        </div>
+    <div className="w-full  bg-slate-900 text-slate-300 p-4 flex justify-between items-center lg:rounded-bn-md fixed top-0 shadow-sm shadow-black/50 z-20 " >
+
+      <Link  className='text-xl font-semibold hover:text-white lg:w-full pl-10' to={'/'}>Blogs</Link>
+      
+      <input type="text" className=' rounded-md p-2 border-2 border-slate-300 focus:ring-2  bg-slate-500 text-md focus:outline-none focus:ring-slate-600 transition-all ease-in-out duration-150  lg:w-full' placeholder='Search'/>
+      <ul className='hidden lg:flex gap-8 items-center text-lg font-semibold  justify-end w-full pr-10'>  
+        <li>
+          {!auth&&<button className='hover:text-white transition-all ease-in-out duration-300' onClick={()=>setLogin(true)}>Login</button>}
+        </li>
+        <li>
+         {!auth && <button className='hover:text-gray-900 transition-all ease-in-out duration-300 bg-slate-200 text-gray-700 rounded-md p-2 ' onClick={()=>setReg(true)}>Register</button>}
+        </li>
+        <li>
+          {auth&&<Link  to={'/profile'} className=' flex gap-4 items-center hover:text-white transition-all ease-in-out duration-300'><img src={user} alt=""  className='rounded-full object-cover w-16 h-16 ring-2 ring-white ' /></Link>}
+        </li>
+      </ul>
+      <div className="relative">
+      <button className='hover:ring-2 hover:ring-white rounded-md p-2 duration-300 ease-in-out focus:ring-2 focus:ring-white lg:hidden relative'><MdMenu className='text-2xl' onClick={()=>setMenu(!showMenu)}/></button>
+
+      {showMenu && <div className=" absolute bg-white shadow-md right-5 top-10 rounded-md text-slate-600 w-36 flex flex-col">
+        {!auth&&<button onClick={()=>setLogin(true)} className='hover:text-black  font-semibold  p-2 border-2 border-slate-700/50 rounded-t-md w-full'>Login</button>}
+        {!auth&&<button onClick={()=>setReg(true)} className='hover:text-black  font-semibold  p-2 border-[1px] border-slate-700/50 w-full'>Register</button>}
+        {auth&&<Link to={'/profile'} className='hover:text-black  font-semibold  p-2 border-[1px] border-slate-700/50 w-full text-center'>Profile</Link>}
+      </div>}
+      </div>
+      {showLogin && <Login setClose={setLogin}/>}
+      {showReg &&   <Register setClose={setReg}/> }
+   
+      </div>
+    
     </>
   )
-}
-
-function PopNav({show,auth }){
-  return<>
-  <div className={show?" ring-1 ring-black text-black bg-white rounded-md flex flex-col justify-between items-center  gap-3 w-[150px] p-5 pt-1":"hidden"}>
-    <button className={!auth?' border-b-2  border-gray-200 w-full ':'hidden'}>Login</button>
-    <button className={!auth?' border-b-2  border-gray-200 w-full ':'hidden'}>Register</button>
-    <button className={auth?' border-b-2  border-gray-200 w-full ':'hidden'}>Profile</button>
-    <button className={auth?' border-b-2  border-gray-200 w-full ':'hidden'}>Logout</button>
-  </div>
-  </>
 }
